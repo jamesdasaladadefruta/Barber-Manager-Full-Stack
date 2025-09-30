@@ -10,11 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 🔹 Configura __dirname no ESModules
+// Configura __dirname no ESModules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🔹 Inicializar Banco de Dados
+// Inicializar Banco de Dados
 async function initDB() {
   try {
     await pool.query(`
@@ -25,23 +25,19 @@ async function initDB() {
         senha VARCHAR(200) NOT NULL
       );
     `);
-    console.log(" Tabela 'usuarios' verificada/criada com sucesso.");
+    console.log("Tabela 'usuarios' verificada/criada com sucesso.");
   } catch (err) {
-    console.error(" Erro ao criar tabela:", err);
+    console.error("Erro ao criar tabela:", err);
   }
 }
 initDB();
 
-// -------------------------
 // Rotas da API
-// -------------------------
 
-// Rota inicial da API
 app.get("/api", (req, res) => {
   res.json({ mensagem: "Bem-vindo à minha API com Node.js e PostgreSQL!" });
 });
 
-// Rota que retorna lista de usuários (GET)
 app.get("/api/usuarios", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM usuarios");
@@ -52,7 +48,6 @@ app.get("/api/usuarios", async (req, res) => {
   }
 });
 
-// Rota que cria um usuário (POST)
 app.post("/api/usuarios", async (req, res) => {
   const { nome, email, senha } = req.body;
   try {
@@ -69,7 +64,7 @@ app.post("/api/usuarios", async (req, res) => {
   }
 });
 
-
+// Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, "dist")));
 
 // Fallback para SPA (React Router)
@@ -77,11 +72,8 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-// -------------------------
-// Start Server
-// -------------------------
-
+// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(` Servidor rodando na porta ${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
