@@ -7,8 +7,8 @@
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build": "npx vite build",
-    "start": "vite preview --port $PORT"
+    "build": "node ./node_modules/vite/bin/vite.js build",
+    "start": "node ./node_modules/vite/bin/vite.js preview --port $PORT"
   },
   "dependencies": {
     "react": "^19.1.1",
