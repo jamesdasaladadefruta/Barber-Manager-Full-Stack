@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build": "node ./node_modules/vite/bin/vite.js build",
-    "start": "node ./node_modules/vite/bin/vite.js preview --port $PORT"
+    "start": "node ./node_modules/vite/bin/vite.js preview --port $PORT --host 0.0.0.0"
+
   },
   "dependencies": {
     "react": "^19.1.1",
