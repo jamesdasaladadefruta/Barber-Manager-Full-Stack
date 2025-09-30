@@ -25,7 +25,7 @@ async function initDB() {
         senha VARCHAR(200) NOT NULL
       );
     `);
-    console.log("✅ Tabela 'usuarios' verificada/criada com sucesso.");
+    console.log(" Tabela 'usuarios' verificada/criada com sucesso.");
   } catch (err) {
     console.error(" Erro ao criar tabela:", err);
   }
