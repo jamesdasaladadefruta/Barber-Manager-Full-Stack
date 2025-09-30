@@ -1,4 +1,3 @@
-// index.js
 import express from "express";
 import cors from "cors";
 import path from "path";
@@ -74,18 +73,9 @@ app.post("/api/usuarios", async (req, res) => {
 // Servir Frontend React
 // -------------------------
 
-// Servir arquivos estáticos da pasta dist
-app.use(express.static(path.join(__dirname, "dist")));
+// Aqui usamos a pasta correta do frontend
+app.use(
+  express.static(path.join(__dirname, "Gestaoestetica", "dist"))
+);
 
-// Fallback para React Router (qualquer rota que não seja API cai no index.html)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
-// -------------------------
-// Iniciar Servidor
-// -------------------------
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-});
+// Fallback
