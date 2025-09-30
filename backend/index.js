@@ -27,7 +27,7 @@ async function initDB() {
     `);
     console.log("✅ Tabela 'usuarios' verificada/criada com sucesso.");
   } catch (err) {
-    console.error("❌ Erro ao criar tabela:", err);
+    console.error(" Erro ao criar tabela:", err);
   }
 }
 initDB();
@@ -69,11 +69,7 @@ app.post("/api/usuarios", async (req, res) => {
   }
 });
 
-// -------------------------
-// Servir Frontend React
-// -------------------------
 
-// 🚨 IMPORTANTE: Antes do deploy, rode "npm run build" no frontend e copie a pasta "dist" para dentro do backend
 app.use(express.static(path.join(__dirname, "dist")));
 
 // Fallback para SPA (React Router)
@@ -87,5 +83,5 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  console.log(` Servidor rodando na porta ${PORT}`);
 });
