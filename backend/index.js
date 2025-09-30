@@ -73,9 +73,19 @@ app.post("/api/usuarios", async (req, res) => {
 // Servir Frontend React
 // -------------------------
 
-// Aqui usamos a pasta correta do frontend
-app.use(
-  express.static(path.join(__dirname, "Gestaoestetica", "dist"))
-);
+// 🚨 IMPORTANTE: Antes do deploy, rode "npm run build" no frontend e copie a pasta "dist" para dentro do backend
+app.use(express.static(path.join(__dirname, "dist")));
 
-// Fallback
+// Fallback para SPA (React Router)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+// -------------------------
+// Start Server
+// -------------------------
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
