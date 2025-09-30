@@ -1,0 +1,60 @@
+.containerS {
+    background-color: #303030;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+
+}
+
+header {
+    background-color: #6d6d6de5;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.textH,
+.text {
+    color: #fff;
+}
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    flex: 1;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+}
+.aS{
+text-decoration: none;
+}
+
+.buttonS {
+    background-color: #D3AF37;
+    width: 400px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.buttonS:hover {
+    background-color: #a78a2d;
+    width: 400px;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+}

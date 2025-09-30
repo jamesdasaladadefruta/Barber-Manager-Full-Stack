@@ -1,0 +1,27 @@
+
+.card{
+    background-color: #6d6d6de5;
+    border-radius: 8px;
+    width: 250px;
+    height: 300px;
+}
+.title{
+    color: #D3AF37;
+    font-weight: bold;
+}
+.value{
+    color: #D3AF37;
+    font-weight: lighter;
+}
+/* Para todos os navegadores */
+input[type=number] {
+  appearance: none;
+  -moz-appearance: textfield;   /* Firefox */
+}
+
+/* Chrome, Safari, Edge (Webkit) */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
