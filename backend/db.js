@@ -1,7 +1,7 @@
 // db.js
 import pkg from "pg";
 import dotenv from "dotenv";
-
+DATABASE_URL='postgresql://postgres:flwodFMJlcGwUrLTeNCaAWlWzmsVUqDP@postgres.railway.internal:5432/railway'      
 dotenv.config();
 
 const { Pool } = pkg;
