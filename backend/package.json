@@ -1,20 +1,16 @@
 {
-  "name": "projeto-indiv",
+  "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-     "start": "node index.js", 
+    "start": "node index.js",
     "build": "echo 'no build step'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.5"
   }
 }
