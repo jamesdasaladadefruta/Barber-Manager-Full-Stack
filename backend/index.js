@@ -1,24 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pkg from 'pg'; // Importando Pool do pg
-dotenv.config();
+import pool from './db.js';
 
-const { Pool } = pkg; // Extrai Pool do pacote
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Configuração do PostgreSQL
-const pool = new Pool({
-  host: process.env.DB_HOST,       // Ex.: containers-us-west-123.railway.app
-  port: process.env.DB_PORT,       // Ex.: 5432
-  user: process.env.DB_USER,       // Ex.: postgres
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,   // Ex.: railway
-  ssl: { rejectUnauthorized: false } // Necessário para Railway
-});
+const PORT = process.env.PORT || 8081;
 
 // Criar tabela de usuários se não existir
 const createUsersTable = async () => {
@@ -42,4 +33,34 @@ app.get('/', (req, res) => {
   res.send('Servidor rodando!');
 });
 
-//
+// Adicionar usuário
+app.post('/users', async (req, res) => {
+  const { name, email } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      [name, email]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao adicionar usuário' });
+  }
+});
+
+// Listar usuários
+app.get('/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM users ORDER BY id');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao buscar usuários' });
+  }
+});
+
+// Iniciar servidor
+app.listen(PORT, async () => {
+  await createUsersTable();
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
