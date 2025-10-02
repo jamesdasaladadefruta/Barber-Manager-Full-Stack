@@ -10,4 +10,4 @@ const pool = new Pool({
   },
 });
 
-module.exports.default = pool;
+export default pool;  
