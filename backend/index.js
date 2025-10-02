@@ -1,20 +1,12 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import pool from "./db.js";
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(cors());
 
-// Configura __dirname no ESModules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Inicializar Banco de Dados
 async function initDB() {
   try {
     await pool.query(`
@@ -25,20 +17,22 @@ async function initDB() {
         senha VARCHAR(200) NOT NULL
       );
     `);
-    console.log("Tabela 'usuarios' verificada/criada com sucesso.");
+    console.log("✅Tabela 'usuarios' verificada/criada com sucesso.");
   } catch (err) {
-    console.error("Erro ao criar tabela:", err);
+    console.error("❌ Erro ao criar tabela:", err);
   }
 }
+// 🔹 Inicializa o banco e cria tabela se não existir
 initDB();
 
-// Rotas da API
 
-app.get("/api", (req, res) => {
+// Rota inicial
+app.get("/", (req, res) => {
   res.json({ mensagem: "Bem-vindo à minha API com Node.js e PostgreSQL!" });
 });
 
-app.get("/api/usuarios", async (req, res) => {
+// Rota que retorna lista de usuários (GET)
+app.get("/usuarios", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM usuarios");
     res.json(result.rows);
@@ -48,7 +42,8 @@ app.get("/api/usuarios", async (req, res) => {
   }
 });
 
-app.post("/api/usuarios", async (req, res) => {
+// Rota que cria um usuário (POST)
+app.post("/usuarios", async (req, res) => {
   const { nome, email, senha } = req.body;
   try {
     const result = await pool.query(
@@ -64,17 +59,8 @@ app.post("/api/usuarios", async (req, res) => {
   }
 });
 
-// Servir arquivos estáticos
-app.use(express.static(path.join(__dirname, "dist")));
-
-// Fallback para SPA (React Router)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
-
