@@ -12,6 +12,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id SERIAL PRIMARY KEY,
+        nome VARCHAR(100) NOT NULL,
+        email VARCHAR(150) UNIQUE NOT NULL,
+        senha VARCHAR(200) NOT NULL
+      );
+    `);
+    console.log("✅Tabela 'usuarios' verificada/criada com sucesso.");
+  } catch (err) {
+    console.error("❌ Erro ao criar tabela:", err);
+  }
+}
+// 🔹 Inicializa o banco e cria tabela se não existir
+
+initDB();
+
 // Rota de teste (para verificar se API está funcionando)
 app.get("/", (req, res) => {
   res.send("🚀 Backend está rodando!");
