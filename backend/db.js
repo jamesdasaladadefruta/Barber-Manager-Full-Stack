@@ -1,13 +1,22 @@
-const { Pool } = require("pg");
+// db.js
+import pkg from "pg";
+import dotenv from "dotenv";
+dotenv.config();
 
-require("dotenv").config();
+const { Pool } = pkg;
 
-// Configuração do pool para Railway
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // URL do banco fornecida pelo Railway
-  ssl: {
-    rejectUnauthorized: false, // necessário para conexões SSL no Railway
-  },
+  connectionString: process.env.DATABASE_URL,
 });
 
-export default pool;  
+export default pool;
+// Testa a conexão
+export async function testConnection() {
+  try {
+    const res = await pool.query("SELECT NOW()");
+    console.log("✅ Conectado ao banco com sucesso!");
+    console.log("📅 Data/hora no Postgres:", res.rows[0].now);
+  } catch (err) { 
+    console.error("❌ Erro ao conectar no banco:", err);
+  }
+}
