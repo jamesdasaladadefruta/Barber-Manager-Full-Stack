@@ -22,5 +22,5 @@ pool.on("error", (err) => {
   console.error("❌ Erro no pool do banco:", err);
 });
 
-export default pool;
+// export default pool;
 

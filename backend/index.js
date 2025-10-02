@@ -1,57 +1,45 @@
-// server.js
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import pool from "./db.js"; // importa o pool configurado no db.js
-
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import pkg from 'pg'; // Importando Pool do pg
 dotenv.config();
 
+const { Pool } = pkg; // Extrai Pool do pacote
+
 const app = express();
-
-// Middlewares
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-async function initDB() {
+// Configuração do PostgreSQL
+const pool = new Pool({
+  host: process.env.DB_HOST,       // Ex.: containers-us-west-123.railway.app
+  port: process.env.DB_PORT,       // Ex.: 5432
+  user: process.env.DB_USER,       // Ex.: postgres
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,   // Ex.: railway
+  ssl: { rejectUnauthorized: false } // Necessário para Railway
+});
+
+// Criar tabela de usuários se não existir
+const createUsersTable = async () => {
   try {
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS pessoas (
+      CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
-        nome VARCHAR(100) NOT NULL,
-        email VARCHAR(150) UNIQUE NOT NULL,
-        senha VARCHAR(200) NOT NULL
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("✅Tabela 'usuarios' verificada/criada com sucesso.");
+    console.log("Tabela 'users' criada ou já existente!");
   } catch (err) {
-    console.error("❌ Erro ao criar tabela:", err);
+    console.error("Erro ao criar tabela:", err);
   }
-}
-// 🔹 Inicializa o banco e cria tabela se não existir
+};
 
-initDB();
-
-// Rota de teste (para verificar se API está funcionando)
-app.get("/", (req, res) => {
-  res.send("🚀 Backend está rodando!");
+// Rota de teste
+app.get('/', (req, res) => {
+  res.send('Servidor rodando!');
 });
 
-// Rota de teste para o banco
-app.get("/db-check", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({
-      status: "ok",
-      time: result.rows[0].now,
-    });
-  } catch (err) {
-    console.error("❌ Erro no banco:", err);
-    res.status(500).json({ error: "Erro ao conectar no banco" });
-  }
-});
-
-// Porta (Railway injeta automaticamente em process.env.PORT)
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando na porta ${PORT}`);
-});
+//
