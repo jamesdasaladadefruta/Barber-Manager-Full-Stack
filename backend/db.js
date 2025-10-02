@@ -1,17 +1,13 @@
-// db.js
-import pkg from "pg";
-import dotenv from "dotenv";
+const { Pool } = require("pg");
 
-dotenv.config();
-
-const { Pool } = pkg;
+require("dotenv").config();
 
 // Configuração do pool para Railway
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL, // URL do banco fornecida pelo Railway
   ssl: {
-     ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    rejectUnauthorized: false, // necessário para conexões SSL no Railway
   },
 });
 
-export default pool;
+module.exports = pool;
