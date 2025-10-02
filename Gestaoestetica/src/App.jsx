@@ -18,7 +18,7 @@ function App() {
 
         <div className="imageWrapper">
           <div className="mascarabg"></div>
-          {/* <img src={fotoCabelo} alt="Imagem de corte de cabelo" /> */}
+          <img src={fotoCabelo} alt="Imagem de corte de cabelo" />
         </div>
       </div>
     </div>
