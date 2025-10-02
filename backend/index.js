@@ -1,87 +1,38 @@
+// server.js
 import express from "express";
 import cors from "cors";
-import pool from "./db.js";
+import dotenv from "dotenv";
+import pool from "./db.js"; // importa o pool configurado no db.js
+
+dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+// Middlewares
 app.use(cors());
+app.use(express.json());
 
-async function initDB() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        nome VARCHAR(100) NOT NULL,
-        email VARCHAR(150) UNIQUE NOT NULL,
-        senha VARCHAR(200) NOT NULL
-      );
-    `);
-    console.log("✅Tabela 'usuarios' verificada/criada com sucesso.");
-  } catch (err) {
-    console.error("❌ Erro ao criar tabela:", err);
-  }
-}
-// 🔹 Inicializa o banco e cria tabela se não existir
-
-initDB();
-
-
-// Rota inicial
-
+// Rota de teste (para verificar se API está funcionando)
 app.get("/", (req, res) => {
-  res.json({ mensagem: "Bem-vindo à minha API com Node.js e PostgreSQL!" });
+  res.send("🚀 Backend está rodando!");
 });
 
-// Rota que retorna lista de usuários (GET)
-
-app.get("/usuarios", async (req, res) => {
+// Rota de teste para o banco
+app.get("/db-check", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM usuarios");
-    res.json(result.rows);
+    const result = await pool.query("SELECT NOW()");
+    res.json({
+      status: "ok",
+      time: result.rows[0].now,
+    });
   } catch (err) {
-    console.error("Erro ao buscar usuários:", err);
-    res.status(500).json({ erro: "Erro ao buscar usuários" });
+    console.error("❌ Erro no banco:", err);
+    res.status(500).json({ error: "Erro ao conectar no banco" });
   }
 });
 
-// Rota que cria um usuário (POST)
-
-app.post("/usuarios", async (req, res) => {
-  const { nome, email, senha } = req.body;
-  try {
-    const result = await pool.query(
-      "INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3) RETURNING *",
-      [nome, email, senha]
-    );
-    res
-      .status(201)
-      .json({ mensagem: "Usuário criado com sucesso!", usuario: result.rows[0] });
-  } catch (err) {
-    console.error("Erro ao criar usuário:", err);
-    res.status(500).json({ erro: "Erro ao criar usuário" });
-  }
-});
-
-// Iniciar servidor
-
-const PORT = process.env.PORT || 3000;
+// Porta (Railway injeta automaticamente em process.env.PORT)
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  console.log(`✅ Servidor rodando na porta ${PORT}`);
 });
-
-
-
-async function testConnection() {
-  try {
-    const res = await pool.query("SELECT NOW()");
-    console.log("✅ Conectado ao banco com sucesso!");
-    console.log("📅 Data/hora no Postgres:", res.rows[0].now);
-  } catch (err) {
-    console.error("❌ Erro ao conectar no banco:", err);
-  } finally {
-    await pool.end(); // Fecha a conexão
-  }
-}
-
-testConnection();
