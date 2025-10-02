@@ -1,3 +1,4 @@
+// db.js
 import pkg from "pg";
 import dotenv from "dotenv";
 
@@ -5,9 +6,12 @@ dotenv.config();
 
 const { Pool } = pkg;
 
+// Detecta se está em produção (Railway) ou desenvolvimento (localhost)
+const isProduction = process.env.NODE_ENV === "production";
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
 
 pool.on("connect", () => {
