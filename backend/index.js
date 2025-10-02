@@ -64,3 +64,18 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
+
+
+async function testConnection() {
+  try {
+    const res = await pool.query("SELECT NOW()");
+    console.log("✅ Conectado ao banco com sucesso!");
+    console.log("📅 Data/hora no Postgres:", res.rows[0].now);
+  } catch (err) {
+    console.error("❌ Erro ao conectar no banco:", err);
+  } finally {
+    await pool.end(); // Fecha a conexão
+  }
+}
+
+testConnection();
