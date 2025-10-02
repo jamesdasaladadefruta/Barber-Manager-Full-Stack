@@ -23,15 +23,18 @@ async function initDB() {
   }
 }
 // 🔹 Inicializa o banco e cria tabela se não existir
+
 initDB();
 
 
 // Rota inicial
+
 app.get("/", (req, res) => {
   res.json({ mensagem: "Bem-vindo à minha API com Node.js e PostgreSQL!" });
 });
 
 // Rota que retorna lista de usuários (GET)
+
 app.get("/usuarios", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM usuarios");
@@ -43,6 +46,7 @@ app.get("/usuarios", async (req, res) => {
 });
 
 // Rota que cria um usuário (POST)
+
 app.post("/usuarios", async (req, res) => {
   const { nome, email, senha } = req.body;
   try {
@@ -60,10 +64,12 @@ app.post("/usuarios", async (req, res) => {
 });
 
 // Iniciar servidor
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
+
 
 
 async function testConnection() {
