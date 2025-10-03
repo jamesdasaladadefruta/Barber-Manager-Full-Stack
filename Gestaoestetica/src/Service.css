@@ -58,3 +58,48 @@ text-decoration: none;
     cursor: pointer;
     color: #fff;
 }
+.finishPT{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+    height: 15%;
+    gap: 90px;
+}
+.finishPedido{
+    background-color: #6d6d6de5;
+    padding: 20px;
+    align-items: center;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 8px;
+}
+.finishPedido span{
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+}
+.finishPedido h5{
+    color: #fff;
+      font-size: 15px;
+}
+.buttonF{
+     background-color: #D3AF37;
+    width: 100px;
+    height: 35px;
+    border: 0;
+    border-radius: 8px;
+
+    cursor: pointer;
+    color: #fff;
+}
+.buttonF:hover{
+    background-color: #a78a2d;
+    width: 100px;
+    height: 35px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+}
