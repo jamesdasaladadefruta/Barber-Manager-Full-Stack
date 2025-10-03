@@ -1,9 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool from './db.js';
+const { Pool } = require('pg');
 
-dotenv.config();
+// Configuração do pool de conexões
+const pool = new Pool({
+  connectionString: 'postgresql://neondb_owner:npg_wiM5J1BPFjUA@ep-wandering-cake-acp8ynxp-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require' , 
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+dotenv.config(); 
 
 const app = express();
 app.use(express.json());
