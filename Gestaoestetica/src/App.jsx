@@ -11,6 +11,7 @@ function App() {
     if (!email || !senha) {
       alert("Preencha todos os campos!");
       return;
+
     }
 
     try {
