@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // import useNavigate
 import './App.css'
 import fotoCabelo from './assets/image 1.png'
 
 function App() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate(); // criar o hook
 
   const handleLogin = async () => {
     if (!email || !senha) {
       alert("Preencha todos os campos!");
       return;
-
     }
 
     try {
@@ -23,7 +23,7 @@ function App() {
 
       if (res.ok) {
         alert("Login realizado com sucesso!");
-        // redirecionar ou salvar token
+        navigate("/service"); // ⬅️ aqui você redireciona
       } else {
         alert("Usuário ou senha incorretos!");
       }
