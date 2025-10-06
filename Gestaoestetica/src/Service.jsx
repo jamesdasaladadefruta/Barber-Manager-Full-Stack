@@ -46,7 +46,7 @@ function Service() {
     setApiResponse(null);
 
     try {
-      const response = await fetch("https://seu-backend.onrender.com/api/pedidos", {
+      const response = await fetch("https://barber-manager-back-end.onrender.com/api/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
