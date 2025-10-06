@@ -9,11 +9,15 @@ function Service() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setApiResponse(null);
+    setDate('');
+    setTime('');
   };
 
   const handleSelect = (title, value, isSelectedNow) => {
@@ -27,10 +31,14 @@ function Service() {
 
   const total = Object.values(selectedServices).reduce((s, v) => s + v, 0);
 
-  // 🔹 Função que envia dados para a API
+  // 🔹 Envia os dados do pedido para o backend
   const handleConfirm = async () => {
     if (Object.keys(selectedServices).length === 0) {
       alert("Selecione pelo menos um serviço!");
+      return;
+    }
+    if (!date || !time) {
+      alert("Escolha uma data e um horário!");
       return;
     }
 
@@ -45,20 +53,21 @@ function Service() {
         },
         body: JSON.stringify({
           servicos: selectedServices,
-          total: total,
-          data: new Date().toISOString(),
+          total,
+          data: date,
+          horario: time,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setApiResponse({ success: true, message: "Pedido enviado com sucesso!" });
+        setApiResponse({ success: true, message: "✅ Pedido enviado com sucesso!" });
       } else {
         setApiResponse({ success: false, message: data.error || "Erro ao enviar pedido." });
       }
     } catch (error) {
-      setApiResponse({ success: false, message: "Erro de conexão com o servidor." });
+      setApiResponse({ success: false, message: "❌ Erro de conexão com o servidor." });
     } finally {
       setLoading(false);
     }
@@ -92,12 +101,35 @@ function Service() {
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h2>Confirmação do Pedido</h2>
+
         <ul>
           {Object.entries(selectedServices).map(([nome, preco]) => (
             <li key={nome}>{nome}: R${preco},00</li>
           ))}
         </ul>
+
         <h3>Total: R${total},00</h3>
+
+        <div className="dateTimeInputs">
+          <label>
+            Data:
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
+            />
+          </label>
+
+          <label>
+            Horário:
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </label>
+        </div>
 
         {loading ? (
           <p>Enviando pedido...</p>
