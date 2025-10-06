@@ -24,13 +24,13 @@ function App() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Verifica o papel do usuário retornado pelo backend
-        if (data.user && data.user.role === "admin") {
-          alert("Bem-vindo, administrador!");
-          navigate("/admin");
+        alert("Login realizado com sucesso!");
+
+        // 🔹 Verifica o papel do usuário retornado pelo backend
+        if (data.role === "admin") {
+          navigate("/admin"); // redireciona para admin
         } else {
-          alert("Login realizado com sucesso!");
-          navigate("/service");
+          navigate("/service"); // redireciona para usuário comum
         }
       } else {
         alert(data.error || "Usuário ou senha incorretos!");
