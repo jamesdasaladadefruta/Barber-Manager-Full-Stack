@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Admin.css";
 
-function AdminPanel() {
+function Admin() {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
 
