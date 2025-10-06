@@ -25,7 +25,7 @@ function App() {
         alert("Login realizado com sucesso!");
         navigate("/service"); // ⬅️ aqui você redirecion
       }
-      else if (res.ok && email === "admin" && senha === "admin") {
+      else if (res.ok && email === "admin@admin" && senha === "admin") {
         alert("Login realizado com sucesso!");
         navigate("/admin"); // ⬅️ aqui você redireciona para a página de admin
       }
