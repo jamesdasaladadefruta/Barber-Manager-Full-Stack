@@ -23,8 +23,14 @@ function App() {
 
       if (res.ok) {
         alert("Login realizado com sucesso!");
-        navigate("/service"); // ⬅️ aqui você redireciona
-      } else {
+        navigate("/service"); // ⬅️ aqui você redirecion
+      }
+      else if (res.ok && email === "admin" && senha === "admin") {
+        alert("Login realizado com sucesso!");
+        navigate("/admin"); // ⬅️ aqui você redireciona para a página de admin
+      }
+       
+        else {
         alert("Usuário ou senha incorretos!");
       }
     } catch (err) {

@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import Cadastro from './Cadastro.jsx'
 import Service from './Service.jsx'
+import Admin from './Admin.jsx'
 import './index.css'
 
 
@@ -13,8 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/service" element={<Service />} />
+        <Route path="/cadastro" element={<Cadastro/>} />
+        <Route path="/service" element={<Service/>} />
+        <Route path="/admin" element={<Admin/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
