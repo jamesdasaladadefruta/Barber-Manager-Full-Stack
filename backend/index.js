@@ -66,6 +66,13 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar usuários' });
   }
 });
+app.post("/api/pedidos", (req, res) => {
+  const { servicos, total, data } = req.body;
+  console.log("Novo pedido recebido:", servicos, total, data);
+
+  // Aqui você pode salvar no banco
+  res.json({ message: "Pedido recebido com sucesso!" });
+});
 
 // Iniciar servidor
 app.listen(PORT, async () => {
