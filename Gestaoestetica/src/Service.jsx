@@ -76,7 +76,7 @@ function Service() {
   return (
     <div className='containerS'>
       <header>
-        <h2 className='textH'>Bem-vindo</h2>
+        <h2 className='textH'>Bem-vindo </h2>
       </header>
 
       <div>
@@ -100,8 +100,7 @@ function Service() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h2>Confirmação do Pedido</h2>
-
+        <h2 style={{ marginBottom: 10 }}>Confirmação do Pedido</h2>
         <ul>
           {Object.entries(selectedServices).map(([nome, preco]) => (
             <li key={nome}>{nome}: R${preco},00</li>
