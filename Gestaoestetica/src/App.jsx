@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // import useNavigate
-import './App.css'
-import fotoCabelo from './assets/image 1.png'
+import { Link, useNavigate } from "react-router-dom";
+import './App.css';
+import fotoCabelo from './assets/image 1.png';
 
 function App() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const navigate = useNavigate(); // criar o hook
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     if (!email || !senha) {
@@ -21,17 +21,18 @@ function App() {
         body: JSON.stringify({ email, senha }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
         alert("Login realizado com sucesso!");
-        navigate("/service"); // ⬅️ aqui você redirecion
-      }
-      else if (res.ok && email === "admin@admin" && senha === "admin") {
-        alert("Login realizado com sucesso!");
-        navigate("/admin"); // ⬅️ aqui você redireciona para a página de admin
-      }
-       
-        else {
-        alert("Usuário ou senha incorretos!");
+        // ✅ Redireciona com base no papel retornado
+        if (data.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/service");
+        }
+      } else {
+        alert(data.message || "Usuário ou senha incorretos!");
       }
     } catch (err) {
       console.error(err);
@@ -68,7 +69,7 @@ function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default App;
