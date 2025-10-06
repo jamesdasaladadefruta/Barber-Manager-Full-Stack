@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Cadastro.css";
 
 function Cadastro() {
@@ -9,6 +9,8 @@ function Cadastro() {
     senha: "",
     confirmarSenha: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,14 +35,17 @@ function Cadastro() {
         }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        alert("Cadastro realizado com sucesso!");
+        alert("✅ Cadastro realizado com sucesso!");
+        navigate("/"); // redireciona para a tela de login
       } else {
-        alert("Erro ao cadastrar!");
+        alert(`❌ Erro: ${data.error || "Não foi possível cadastrar."}`);
       }
     } catch (error) {
       console.error(error);
-      alert("Erro de conexão com o servidor.");
+      alert("⚠️ Erro de conexão com o servidor.");
     }
   };
 
@@ -49,6 +54,7 @@ function Cadastro() {
       <div className="loginPart">
         <form className="cadastroGroup" onSubmit={handleSubmit}>
           <h2>Cadastro</h2>
+
           <input
             type="text"
             name="nome"
@@ -57,6 +63,7 @@ function Cadastro() {
             onChange={handleChange}
             required
           />
+
           <input
             type="email"
             name="email"
@@ -65,6 +72,7 @@ function Cadastro() {
             onChange={handleChange}
             required
           />
+
           <input
             type="password"
             name="senha"
@@ -73,6 +81,7 @@ function Cadastro() {
             onChange={handleChange}
             required
           />
+
           <input
             type="password"
             name="confirmarSenha"
@@ -81,7 +90,9 @@ function Cadastro() {
             onChange={handleChange}
             required
           />
+
           <button type="submit">Cadastrar</button>
+
           <p>
             Já tem uma conta? <Link to="/">Fazer login</Link>
           </p>
