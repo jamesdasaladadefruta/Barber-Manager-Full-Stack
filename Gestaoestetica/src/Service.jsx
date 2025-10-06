@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Card from './components/Card';
 import Modal from './components/Modal';
@@ -11,6 +11,7 @@ function Service() {
   const [apiResponse, setApiResponse] = useState(null);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [takenTimes, setTakenTimes] = useState([]); // horários ocupados
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
@@ -18,6 +19,7 @@ function Service() {
     setApiResponse(null);
     setDate('');
     setTime('');
+    setTakenTimes([]);
   };
 
   const handleSelect = (title, value, isSelectedNow) => {
@@ -31,6 +33,28 @@ function Service() {
 
   const total = Object.values(selectedServices).reduce((s, v) => s + v, 0);
 
+  // 🔹 Busca horários já ocupados ao mudar a data
+  useEffect(() => {
+    if (!date) return;
+
+    const fetchTakenTimes = async () => {
+      try {
+        const res = await fetch('https://barber-manager-back-end.onrender.com/api/pedidos');
+        const data = await res.json();
+
+        const times = data
+          .filter(p => p.data === date)
+          .map(p => p.horario);
+
+        setTakenTimes(times);
+      } catch (err) {
+        console.error('Erro ao buscar horários ocupados:', err);
+      }
+    };
+
+    fetchTakenTimes();
+  }, [date]);
+
   // 🔹 Envia os dados do pedido para o backend
   const handleConfirm = async () => {
     if (Object.keys(selectedServices).length === 0) {
@@ -42,15 +66,18 @@ function Service() {
       return;
     }
 
+    if (takenTimes.includes(time)) {
+      alert("Horário já reservado. Escolha outro.");
+      return;
+    }
+
     setLoading(true);
     setApiResponse(null);
 
     try {
       const response = await fetch("https://barber-manager-back-end.onrender.com/api/pedidos", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           servicos: selectedServices,
           total,
@@ -63,6 +90,10 @@ function Service() {
 
       if (response.ok) {
         setApiResponse({ success: true, message: "✅ Pedido enviado com sucesso!" });
+        setSelectedServices({});
+        setDate('');
+        setTime('');
+        setTakenTimes(prev => [...prev, time]); // adiciona ao bloqueio
       } else {
         setApiResponse({ success: false, message: data.error || "Erro ao enviar pedido." });
       }
@@ -71,6 +102,21 @@ function Service() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // 🔹 Função para desabilitar horários ocupados no input
+  const renderTimeOptions = () => {
+    const options = [];
+    for (let h = 9; h <= 18; h++) { // Horários das 09:00 às 18:00
+      const hour = h.toString().padStart(2, '0');
+      const timeStr = `${hour}:00`;
+      options.push(
+        <option key={timeStr} value={timeStr} disabled={takenTimes.includes(timeStr)}>
+          {timeStr} {takenTimes.includes(timeStr) ? "(Ocupado)" : ""}
+        </option>
+      );
+    }
+    return options;
   };
 
   return (
@@ -122,11 +168,10 @@ function Service() {
 
           <label>
             Horário:
-            <input
-              type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
+            <select value={time} onChange={(e) => setTime(e.target.value)}>
+              <option value="">Selecione um horário</option>
+              {renderTimeOptions()}
+            </select>
           </label>
         </div>
 
