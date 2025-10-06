@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import './App.css';
-import fotoCabelo from './assets/image 1.png';
+import "./App.css";
+import fotoCabelo from "./assets/image 1.png";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -24,18 +24,19 @@ function App() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Login realizado com sucesso!");
-        // ✅ Redireciona com base no papel retornado
-        if (data.role === "admin") {
+        // ✅ Verifica o papel do usuário retornado pelo backend
+        if (data.user && data.user.role === "admin") {
+          alert("Bem-vindo, administrador!");
           navigate("/admin");
         } else {
+          alert("Login realizado com sucesso!");
           navigate("/service");
         }
       } else {
-        alert(data.message || "Usuário ou senha incorretos!");
+        alert(data.error || "Usuário ou senha incorretos!");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Erro de conexão:", err);
       alert("Erro de conexão com o servidor.");
     }
   };
@@ -45,19 +46,23 @@ function App() {
       <div className="loginPart">
         <div className="inputGroup">
           <h2>Login</h2>
+
           <input
             type="text"
             placeholder="UserName or E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
           <input
             type="password"
             placeholder="Password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
+
           <button onClick={handleLogin}>Entrar</button>
+
           <p>
             Não tem uma conta? <Link to="/cadastro">Cadastrar-se</Link>
           </p>
